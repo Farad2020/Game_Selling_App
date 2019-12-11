@@ -27,7 +27,7 @@ public class Game extends Good {
         this.publisher = publisher;
         this.developer = developer;
         try {
-            SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
             java.util.Date date = sd.parse(release_date);
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
             this.release_date = sqlDate;
@@ -87,7 +87,7 @@ public class Game extends Good {
 
     public String getRelease_date_string() {
         Date date = this.release_date;
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         String rdate = df.format(date);
 
         return rdate;
@@ -99,7 +99,7 @@ public class Game extends Good {
 
     public void setRelease_date_from_str(String release_date) {
         try {
-            SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
             java.util.Date date = sd.parse(release_date);
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
             this.release_date = sqlDate;

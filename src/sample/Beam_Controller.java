@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -336,14 +337,15 @@ public class Beam_Controller {
             save_changes();
         });
 
-
-        
+/*
+        // BYE when controller shuts down
         try{
             Request req = new Request("BYE");
             oos.writeObject(req);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
     }
 
 
@@ -400,6 +402,21 @@ public class Beam_Controller {
                 }
                 break;
             }
+        }
+    }
+
+    public void update_games_in_store(){
+        try{
+            Request req = new Request("GET_ALL");
+            oos.writeObject(req);
+            Reply rep = (Reply)ois.readObject();
+            games_in_store.clear();
+            for(Game g:rep.getGames())
+                games_in_store.add(g);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -518,18 +535,18 @@ public class Beam_Controller {
         String developer = create_game_developer_field.getText();
         String publisher = create_game_publisher_field.getText();
         String genre = create_game_genre_field.getSelectionModel().getSelectedItem();
-        String date = create_game_rel_date_field.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String date = create_game_rel_date_field.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         int sold = 0;
         double price = 0;
         try{
             price = Double.parseDouble(create_game_price_field.getText());
         }catch (java.lang.NumberFormatException e){
-            create_item_page_label.setText("You need to fill all of the following fields correctly: price,sold");
+            create_item_page_label.setText("You need to fill all of the following fields correctly: price");
             return;
         }
         if(check_is_creator_filled(title, genre, publisher, developer, date)){
+            System.out.println(date);
             Game g = new Game(null, price, title, sold, genre, publisher, developer, date);
-            games_in_store.add(g);
             try {
                 /*
                 SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
@@ -538,14 +555,12 @@ public class Beam_Controller {
                 */
                 Request req = new Request("ADD", g);
                 oos.writeObject(req);
-
                 Reply rep = (Reply)ois.readObject();
                 System.out.println(rep.getCode());
             }catch(Exception e){
                 e.printStackTrace();
             }
-
-
+            update_games_in_store();
             prepAddItemPage();
             reset_creation_page();
         }
