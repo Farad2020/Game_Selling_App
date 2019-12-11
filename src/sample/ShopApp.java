@@ -23,6 +23,11 @@ public class ShopApp extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest( event ->
+        {
+            primaryStage.close();
+        });
     }
 
 

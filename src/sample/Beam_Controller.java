@@ -337,7 +337,15 @@ public class Beam_Controller {
         });
 
 
+        
+        try{
+            Request req = new Request("BYE");
+            oos.writeObject(req);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
 
     public void search_item(){
