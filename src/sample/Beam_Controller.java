@@ -147,6 +147,9 @@ public class Beam_Controller {
     @FXML
     private Label sign_up_msg_label;
 
+    @FXML
+    private Label crnt_user_lbl;
+
 
     @FXML
     private Button submit_sign_up_btn;
@@ -212,9 +215,10 @@ public class Beam_Controller {
     private static File_Manager filer = new File_Manager();
     public ArrayList<Game> games_in_store = new ArrayList<>();
     private ArrayList<Game> games_in_cart = new ArrayList<>();
+    private ArrayList<User> users = new ArrayList<>();
     ArrayList<String> genres = new ArrayList<>(Arrays.asList("Platformer","RPG","FPS","Strategy","Stealth-Action",  "All") );
     private boolean user_logged = false;
-    private User user;
+    private User current_user = null;
     //create auto filling genres through getting them from txt
 
     private Socket socket;
@@ -237,6 +241,7 @@ public class Beam_Controller {
 
         // set items for -> categories_listview.
         //prep_genres();
+        enter_admin_btn.setVisible(false);
         prepare_main_page_listview();
 
 
@@ -282,13 +287,19 @@ public class Beam_Controller {
 
 
         buy_cart_items_btn.setOnAction(event -> {
-            makePurchase();
+            if(current_user != null)
+                makePurchase();
+            else{
+                offLayouts();
+                sign_in_and_Up_page.setVisible(true);
+            }
         });
 
 
         //Sign up
         sign_in_btn.setOnAction(event -> {
             offLayouts();
+            prep_sign_in_and_Up_page();
             sign_in_and_Up_page.setVisible(true);
         });
 
@@ -343,15 +354,17 @@ public class Beam_Controller {
 
         save_changes_btn.setVisible(false);
 
-/*
-        // BYE when controller shuts down
-        try{
-            Request req = new Request("BYE");
-            oos.writeObject(req);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
+        submit_sign_in_btn.setOnAction(event -> {
+            log_in_check();
+        });
+
+        submit_sign_in_btn.setOnAction(event -> {
+            log_in_check();
+        });
+
+        submit_sign_up_btn.setOnAction(event -> {
+            register();
+        });
     }
 
 
@@ -430,9 +443,14 @@ public class Beam_Controller {
     public void prepare_main_page_listview(){
         if(games_in_store.size() == 0){
             try{
-                Request req = new Request("GET_ALL");
+                Request req = new Request("GET_ALL_USERS");
                 ShopApp.oos.writeObject(req);
                 Reply rep = (Reply)ShopApp.ois.readObject();
+                users = rep.getUsers();
+
+                req = new Request("GET_ALL");
+                ShopApp.oos.writeObject(req);
+                rep = (Reply)ShopApp.ois.readObject();
                 games_in_store = rep.getGames();
                 if(categories_listview.getItems().size() == 0){
                     categories_listview.getItems().addAll(genres);
@@ -523,6 +541,94 @@ public class Beam_Controller {
         prepAdminPage();
     }
 
+    // Log in Sign up
+    public void prep_sign_in_and_Up_page(){
+        sign_in_username_field.setText("");
+        sign_in_password_field.setText("");
+        sign_up_username_field.setText("");
+        sign_up_password1_field.setText("");
+        sign_up_password2_field.setText("");
+    }
+
+    public void log_in_check(){
+        for( User u : users){
+            if (u.getPassword().equals(sign_in_password_field.getText()) && u.getLogin().equals(sign_in_username_field.getText())){
+                current_user = new User(u);
+                System.out.println(current_user);
+                if(u.isIs_moder()){
+                    enter_admin_btn.setVisible(true);
+                }else{
+                    enter_admin_btn.setVisible(false);
+                }
+                System.out.println(u);
+                System.out.println(current_user.getLogin() );
+                String s = "Welcome " +current_user.getLogin() + "!";
+                main_Beam_btn.fire();
+                break;
+            }
+        }
+
+    }
+
+    public void register(){
+        boolean uniq_login = true;
+        boolean pswrd_check = true;
+        for( User u : users){
+            if (u.getUsername().equals(sign_up_username_field.getText())){
+                System.out.println("Need new login");
+                uniq_login = false;
+                break;
+            }
+        }
+        if(uniq_login){
+            if(!sign_up_password1_field.getText().equals(sign_up_password2_field.getText())){
+                System.out.println("pswrd eqality");
+                pswrd_check = false;
+                return;
+            }
+        }
+        try{
+            Request req = new Request("ADD_USER", new User(null,sign_up_username_field.getText(), sign_up_username_field.getText(),sign_up_password2_field.getText(), false));
+            ShopApp.oos.writeObject(req);
+
+            System.out.println(sign_up_username_field.getText() + sign_up_username_field.getText() + sign_up_password2_field.getText());
+            Reply rep = (Reply)ShopApp.ois.readObject();
+            System.out.println(rep.getCode());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try{
+            Request req = new Request("GET_ALL_USERS");
+            ShopApp.oos.writeObject(req);
+            Reply rep = (Reply)ShopApp.ois.readObject();
+            users = rep.getUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for( User u : users){
+            if (u.getPassword().equals(sign_up_password2_field.getText()) && u.getLogin().equals(sign_up_username_field.getText())){
+                current_user = new User(u);
+                System.out.println(current_user);
+                if(u.isIs_moder()){
+                    enter_admin_btn.setVisible(true);
+                }else{
+                    enter_admin_btn.setVisible(false);
+                }
+                System.out.println(u);
+                //crnt_user_lbl.setText("Welcome " +current_user.getUsername() + "!" );
+                main_Beam_btn.fire();
+                break;
+            }
+        }
+
+    }
 
     public void prepAddItemPage(){
         create_game_genre_field.getItems().clear();

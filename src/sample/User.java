@@ -1,6 +1,8 @@
 package sample;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     protected Integer id;
     protected String login;
     protected String username;
@@ -24,6 +26,22 @@ public class User {
         this.username = username;
         this.password = password;
         this.is_moder = is_moder;
+    }
+
+    public User(Integer id, String login, String username, String password, boolean is_moder) {
+        this.id = id;
+        this.login = login;
+        this.username = username;
+        this.password = password;
+        this.is_moder = is_moder;
+    }
+
+    public User(User u) {
+        this.id = u.id;
+        this.login = u.login;
+        this.username = u.username;
+        this.password = u.password;
+        this.is_moder = u.is_moder;
     }
 
     public Integer getId() {
@@ -64,5 +82,16 @@ public class User {
 
     public void setIs_moder(boolean is_moder) {
         this.is_moder = is_moder;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", is_moder=" + is_moder +
+                '}';
     }
 }

@@ -34,7 +34,7 @@ public class Server {
                 System.out.println("waiting for a client...");
 
                 Socket socket = ss.accept();
-                ClientHandler ch = new ClientHandler(socket, conn, users_conn);
+                ClientHandler ch = new ClientHandler(socket, conn);
                 System.out.println("client connected " + socket.getInetAddress().getHostAddress());
                 ch.start();
             }catch(Exception e){

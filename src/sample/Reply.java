@@ -33,6 +33,10 @@ public class Reply implements Serializable {
         games.add(g);
     }
 
+    public void addUser(User u){
+        users.add(u);
+    }
+
     public ArrayList<Game> getGames() {
         return games;
     }

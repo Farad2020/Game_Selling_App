@@ -75,6 +75,7 @@ public class ClientHandler extends Thread{
         }
     }
 
+
     public void removeGame(int id){
         try {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM items where id = ?");
@@ -155,6 +156,29 @@ public class ClientHandler extends Thread{
         }
     }
 
+    public ArrayList<User> getAllUsers(){
+        ArrayList<User> list = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * from users");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String login = rs.getString("login");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                boolean is_moder = rs.getBoolean("is_moder");
+                list.add(new User(id, login, username, password, is_moder));
+            }
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
     public void addUser(User user){
         try {
             PreparedStatement ps = conn.prepareStatement("INSERT INTO users (id, login, username, password, is_moder) VALUES(NULL, ?, ?, ?, ?)");
@@ -170,6 +194,23 @@ public class ClientHandler extends Thread{
         }
     }
 
+    public void saveUserChanges(ArrayList<User> users){
+        try{
+            for(User user: users){
+                PreparedStatement ps = conn.prepareStatement("UPDATE items SET login = ?, username = ?, password = ?, is_moder = ? WHERE id=?");
+                ps.setString(1, user.getLogin());
+                ps.setString(2, user.getUsername());
+                ps.setString(3, user.getPassword());
+                ps.setBoolean(4, user.isIs_moder());
+                ps.setInt(5, user.getId());
+                ps.executeUpdate();
+                ps.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void run(){
         Request req = null;
@@ -200,6 +241,32 @@ public class ClientHandler extends Thread{
                 addUser(req.getUser());
 
                 Reply rep = new Reply("ADDED SUCCESSFULLY");
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(req.getCode().equals("GET_ALL_USERS")){
+                Reply rep = new Reply();
+                ArrayList<User> users = getAllUsers();
+
+                for(User u : users){
+                    rep.addUser(u);
+                }
+
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(req.getCode().equals("SAVE_ALL_USERS")){
+                saveUserChanges(req.getUsers());
+
+                Reply rep = new Reply("SAVED SUCCESSFULLY");
                 try {
                     oos.writeObject(rep);
                 } catch (IOException e) {
