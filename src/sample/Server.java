@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 public class Server {
 
     private Connection conn = null;
+    private Connection users_conn = null;
     private ServerSocket ss = null;
     public Server(){
         try{
@@ -33,7 +34,7 @@ public class Server {
                 System.out.println("waiting for a client...");
 
                 Socket socket = ss.accept();
-                ClientHandler ch = new ClientHandler(socket,conn);
+                ClientHandler ch = new ClientHandler(socket, conn, users_conn);
                 System.out.println("client connected " + socket.getInetAddress().getHostAddress());
                 ch.start();
             }catch(Exception e){

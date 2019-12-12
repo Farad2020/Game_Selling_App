@@ -127,6 +127,50 @@ public class ClientHandler extends Thread{
 
     }
 
+    public void remove_user(int id){
+        try {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM users where id = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUser(int user_id,User user){
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE users SET login = ?, username = ?, password = ?, is_moder = ? WHERE id=?");
+            ps.setString(1, user.getLogin());
+            ps.setString(2,user.getUsername());
+            ps.setString(3,user.getPassword());
+            ps.setBoolean(4, user.isIs_moder());
+            ps.setInt(5, user_id);
+            ps.executeUpdate();
+            ps.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void addUser(User user){
+        try {
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO users (id, login, username, password, is_moder) VALUES(NULL, ?, ?, ?, ?)");
+            ps.setString(1, user.getLogin());
+            ps.setString(2,user.getUsername());
+            ps.setString(3,user.getPassword());
+            ps.setBoolean(4, user.isIs_moder());
+            ps.executeUpdate();
+            ps.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
     public void run(){
         Request req = null;
         while(true){
@@ -134,6 +178,33 @@ public class ClientHandler extends Thread{
                 req = (Request)ois.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+
+            if(req.getCode().equals("REMOVE_USER")){
+                remove_user(req.getId());
+                System.out.println("Removed Successfully");
+            }
+
+            if(req.getCode().equals("UPDATE_USER")){
+                updateUser(req.getId(), req.getUser());
+
+                Reply rep = new Reply("UPDATED SUCCESSFULLY");
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(req.getCode().equals("ADD_USER")){
+                addUser(req.getUser());
+
+                Reply rep = new Reply("ADDED SUCCESSFULLY");
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             if(req.getCode().equals("REMOVE")){

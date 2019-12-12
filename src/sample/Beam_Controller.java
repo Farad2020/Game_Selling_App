@@ -213,14 +213,17 @@ public class Beam_Controller {
     public ArrayList<Game> games_in_store = new ArrayList<>();
     private ArrayList<Game> games_in_cart = new ArrayList<>();
     ArrayList<String> genres = new ArrayList<>(Arrays.asList("Platformer","RPG","FPS","Strategy","Stealth-Action",  "All") );
+    private boolean user_logged = false;
+    private User user;
     //create auto filling genres through getting them from txt
 
-    Socket socket;
-    ObjectOutputStream oos;
-    ObjectInputStream ois;
+    private Socket socket;
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
 
     @FXML
     void initialize() {
+        /*
         try {
             socket = new Socket("127.0.0.1", 1999);
             oos = new ObjectOutputStream(socket.getOutputStream());
@@ -230,6 +233,7 @@ public class Beam_Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
 
         // set items for -> categories_listview.
         //prep_genres();
@@ -337,6 +341,8 @@ public class Beam_Controller {
             save_changes();
         });
 
+        save_changes_btn.setVisible(false);
+
 /*
         // BYE when controller shuts down
         try{
@@ -408,8 +414,8 @@ public class Beam_Controller {
     public void update_games_in_store(){
         try{
             Request req = new Request("GET_ALL");
-            oos.writeObject(req);
-            Reply rep = (Reply)ois.readObject();
+            ShopApp.oos.writeObject(req);
+            Reply rep = (Reply)ShopApp.ois.readObject();
             games_in_store.clear();
             for(Game g:rep.getGames())
                 games_in_store.add(g);
@@ -425,8 +431,8 @@ public class Beam_Controller {
         if(games_in_store.size() == 0){
             try{
                 Request req = new Request("GET_ALL");
-                oos.writeObject(req);
-                Reply rep = (Reply)ois.readObject();
+                ShopApp.oos.writeObject(req);
+                Reply rep = (Reply)ShopApp.ois.readObject();
                 games_in_store = rep.getGames();
                 if(categories_listview.getItems().size() == 0){
                     categories_listview.getItems().addAll(genres);
@@ -441,8 +447,8 @@ public class Beam_Controller {
     public void save_changes(){
         try{
             Request req = new Request("SAVE_ALL", games_in_store);
-            oos.writeObject(req);
-            Reply rep = (Reply)ois.readObject();
+            ShopApp.oos.writeObject(req);
+            Reply rep = (Reply)ShopApp.ois.readObject();
             System.out.println(rep.getCode());
         }catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -505,7 +511,7 @@ public class Beam_Controller {
             if( game.showDetails().equals(all_items_admin_listview.getSelectionModel().getSelectedItem()) ){
                 try {
                     Request req = new Request("REMOVE", game.getId());
-                    oos.writeObject(req);
+                    ShopApp.oos.writeObject(req);
                     games_in_store.remove(game);
                     break;
                 } catch (IOException e) {
@@ -554,8 +560,8 @@ public class Beam_Controller {
                 java.sql.Date sqlRelDate = new java.sql.Date(date.getTime());
                 */
                 Request req = new Request("ADD", g);
-                oos.writeObject(req);
-                Reply rep = (Reply)ois.readObject();
+                ShopApp.oos.writeObject(req);
+                Reply rep = (Reply)ShopApp.ois.readObject();
                 System.out.println(rep.getCode());
             }catch(Exception e){
                 e.printStackTrace();
