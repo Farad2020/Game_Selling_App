@@ -33,6 +33,8 @@ class Fine:
         self.car_id = car_id
         self.fine_desc = fine_desc
 
+
+
     def getFineId(self):
         return self.fine_id
 
@@ -46,7 +48,7 @@ new_fine = Fine(1, vehicle.car_id, "pretty brutal demon killing")
 
 conn = sqlite3.connect("Endterm.db")
 cur = conn.cursor()
-
+'''
 cur.execute("create table if not exists Drivers(driver_licence TEXT, f_name TEXT, s_name TEXT)")
 cur.execute("create table if not exists Cars(car_id INTEGER, car_name INTEGER, driver_licence TEXT)")
 cur.execute("create table if not exists Fines(fine_id INTEGER, car_id INTEGER, fine_desc TEXT)")
@@ -64,5 +66,9 @@ print(dvs)
 print(crs)
 print(fns)
 print('done')
-conn.close()
+conn.close()'''
 
+with open("library.txt", 'r+') as txtFile:
+    library = list(txtFile)
+
+print(library)
