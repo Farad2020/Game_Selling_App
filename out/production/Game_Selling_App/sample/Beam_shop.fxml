@@ -14,140 +14,140 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="main_pane" prefHeight="500.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Beam_Controller">
+<AnchorPane fx:id="main_pane" prefHeight="658.0" prefWidth="933.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Beam_Controller">
    <children>
-      <Label layoutY="-5.0" prefHeight="99.0" prefWidth="714.0" style="-fx-background-color: #171a21;" />
+      <Label layoutY="-5.0" prefHeight="116.0" prefWidth="933.0" style="-fx-background-color: #171a21;" />
       <Button fx:id="main_Beam_btn" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="17.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="156.0" style="-fx-background-color: #171a21;" text="~#BEAM#~" textFill="#c5c3c0">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="open_cart_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="550.0" layoutY="56.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Cart" textFill="#c5c3c0">
+      <Button fx:id="open_cart_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="764.0" layoutY="56.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Cart" textFill="#c5c3c0">
          <font>
             <Font name="Arial" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="save_changes_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="625.0" layoutY="56.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Save" textFill="#c5c3c0">
+      <Button fx:id="save_changes_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="839.0" layoutY="56.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Save" textFill="#c5c3c0">
          <font>
             <Font name="Arial" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="enter_admin_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="625.0" layoutY="14.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Admin" textFill="#c5c3c0">
+      <Button fx:id="enter_admin_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="839.0" layoutY="14.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Admin" textFill="#c5c3c0">
          <font>
             <Font name="Arial" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="sign_in_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="550.0" layoutY="14.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Sign In" textFill="#c5c3c0">
+      <Button fx:id="sign_in_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="764.0" layoutY="14.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Sign In" textFill="#c5c3c0">
          <font>
             <Font name="Arial" size="14.0" />
          </font>
       </Button>
-      <Button fx:id="search_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="447.0" layoutY="29.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Search" textFill="#c5c3c0">
+      <Button fx:id="search_btn" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="661.0" layoutY="29.0" minWidth="53.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" style="-fx-background-color: #171a21;" text="Search" textFill="#c5c3c0">
          <font>
             <Font name="Arial" size="14.0" />
          </font>
       </Button>
-      <TextField fx:id="search_bar_field" layoutX="193.0" layoutY="33.0" prefHeight="26.0" prefWidth="254.0" promptText="Search" style="-fx-border-color: #1b2838; -fx-background-color: #d9e1ec;" styleClass="-fx-text-inner-color: red;">
+      <TextField fx:id="search_bar_field" layoutX="193.0" layoutY="33.0" prefHeight="26.0" prefWidth="458.0" promptText="Search" style="-fx-border-color: #1b2838; -fx-background-color: #d9e1ec;" styleClass="-fx-text-inner-color: red;">
          <effect>
             <Glow />
          </effect>
       </TextField>
-      <AnchorPane fx:id="main_shop_page" layoutY="94.0" prefHeight="466.0" prefWidth="714.0" style="-fx-background-color: #1b2838;">
+      <AnchorPane fx:id="main_shop_page" layoutX="-1.0" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;">
          <children>
-            <ListView fx:id="categories_listview" layoutY="35.0" prefHeight="430.0" prefWidth="200.0" style="-fx-background-color: #21658a;" />
-            <Button fx:id="choose_category_btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #21658a;" text="Choose Category" textFill="WHITE" />
-            <ScrollPane fx:id="shop_content_scroll_pane" hbarPolicy="NEVER" layoutX="452.0" layoutY="8.0" prefHeight="446.0" prefWidth="254.0" style="-fx-background-color: #22355b;">
+            <ListView fx:id="categories_listview" layoutY="35.0" prefHeight="511.0" prefWidth="143.0" style="-fx-background-color: #21658a;" />
+            <Button fx:id="choose_category_btn" mnemonicParsing="false" prefHeight="32.0" prefWidth="143.0" style="-fx-background-color: #21658a;" text="Choose Category" textFill="WHITE" />
+            <ScrollPane fx:id="shop_content_scroll_pane" hbarPolicy="NEVER" layoutX="665.0" layoutY="35.0" prefHeight="511.0" prefWidth="254.0" style="-fx-background-color: #22355b;">
               <content>
-                <AnchorPane fx:id="shop_content_anchor_pane" minHeight="0.0" minWidth="0.0" prefHeight="514.0" prefWidth="485.0" style="-fx-background-color: #22355b;" />
+                <AnchorPane fx:id="shop_content_anchor_pane" minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="254.0" style="-fx-background-color: #22355b;" />
               </content>
             </ScrollPane>
-            <ListView fx:id="filtered_games_listview" layoutX="220.0" layoutY="39.0" prefHeight="422.0" prefWidth="207.0" style="-fx-background-color: #21658a;" />
-            <Button fx:id="buy_item_btn" layoutX="220.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="207.0" style="-fx-background-color: #21658a;" text="Buy" textFill="WHITE" />
+            <ListView fx:id="filtered_games_listview" layoutX="158.0" layoutY="35.0" prefHeight="511.0" prefWidth="490.0" style="-fx-background-color: #21658a;" />
+            <Button fx:id="buy_item_btn" layoutX="158.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="207.0" style="-fx-background-color: #21658a;" text="Buy" textFill="WHITE" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="item_page" layoutY="94.0" prefHeight="466.0" prefWidth="714.0" style="-fx-background-color: #1b2838;" visible="false">
+      <AnchorPane fx:id="item_page" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
          <children>
-            <Button fx:id="add_to_cart_btn" layoutX="487.0" layoutY="147.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #21658a;" text="Add to cart" textFill="WHITE" />
-            <Button fx:id="return_btn" layoutX="14.0" layoutY="420.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="207.0" style="-fx-background-color: #21658a;" text="&lt;&lt;Back" textFill="WHITE" />
-            <Label fx:id="item_page_msg_lbl" layoutX="10.0" layoutY="179.0" text="Test" textFill="WHITE" wrapText="true">
+            <Button fx:id="add_to_cart_btn" layoutX="705.0" layoutY="504.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #21658a;" text="Add to cart" textFill="WHITE" />
+            <Button fx:id="return_btn" layoutX="12.0" layoutY="504.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="207.0" style="-fx-background-color: #21658a;" text="&lt;&lt;Back" textFill="WHITE" />
+            <Label fx:id="item_page_msg_lbl" layoutX="119.0" layoutY="201.0" text="Test" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label layoutX="77.0" layoutY="37.0" text="Title:" textFill="WHITE" wrapText="true">
+            <Label layoutX="186.0" layoutY="59.0" text="Title:" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label layoutX="27.0" layoutY="92.0" text="Developer:" textFill="WHITE" wrapText="true">
+            <Label layoutX="136.0" layoutY="114.0" text="Developer:" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label layoutX="36.0" layoutY="120.0" text="Publisher:" textFill="WHITE" wrapText="true">
+            <Label layoutX="145.0" layoutY="142.0" text="Publisher:" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label layoutX="7.0" layoutY="148.0" text="Release date:" textFill="WHITE" wrapText="true">
+            <Label layoutX="116.0" layoutY="170.0" text="Release date:" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label layoutX="62.0" layoutY="65.0" text="Genre:" textFill="WHITE" wrapText="true">
+            <Label layoutX="171.0" layoutY="87.0" text="Genre:" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label layoutX="487.0" layoutY="92.0" text="Price:" textFill="WHITE" wrapText="true">
+            <Label layoutX="720.0" layoutY="106.0" text="Price:" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label fx:id="item_page_title_lbl" layoutX="131.0" layoutY="37.0" text="None" textFill="WHITE" wrapText="true">
+            <Label fx:id="item_page_title_lbl" layoutX="240.0" layoutY="59.0" text="None" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label fx:id="item_page_gnr_lbl" layoutX="131.0" layoutY="65.0" text="None" textFill="WHITE" wrapText="true">
+            <Label fx:id="item_page_gnr_lbl" layoutX="240.0" layoutY="87.0" text="None" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label fx:id="item_page_dev_lbl" layoutX="131.0" layoutY="92.0" text="None" textFill="WHITE" wrapText="true">
+            <Label fx:id="item_page_dev_lbl" layoutX="240.0" layoutY="114.0" text="None" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label fx:id="item_page_publish_lbl" layoutX="131.0" layoutY="120.0" text="None" textFill="WHITE" wrapText="true">
+            <Label fx:id="item_page_publish_lbl" layoutX="240.0" layoutY="142.0" text="None" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label fx:id="item_page_release_lbl" layoutX="131.0" layoutY="149.0" text="None" textFill="WHITE" wrapText="true">
+            <Label fx:id="item_page_release_lbl" layoutX="240.0" layoutY="171.0" text="None" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label fx:id="item_page_price_lbl" layoutX="540.0" layoutY="92.0" text="None" textFill="WHITE" wrapText="true">
+            <Label fx:id="item_page_price_lbl" layoutX="773.0" layoutY="106.0" text="None" textFill="WHITE" wrapText="true">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="sign_in_and_Up_page" layoutY="94.0" prefHeight="466.0" prefWidth="714.0" style="-fx-background-color: #1b2838;" visible="false">
+      <AnchorPane fx:id="sign_in_and_Up_page" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
          <children>
-            <TabPane fx:id="sign_page_tablepane" layoutX="-1.0" prefHeight="446.0" prefWidth="714.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="sign_page_tablepane" layoutX="-1.0" prefHeight="554.0" prefWidth="934.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab fx:id="sign_in_tab" text="For an old friend">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="374.0" prefWidth="714.0">
                            <children>
-                              <TextField fx:id="sign_in_username_field" alignment="CENTER" layoutX="281.0" layoutY="118.0" promptText="Username" style="-fx-background-color: #ffffff;" />
-                              <PasswordField fx:id="sign_in_password_field" alignment="CENTER" layoutX="281.0" layoutY="176.0" promptText="Password" style="-fx-background-color: #ffffff;" />
-                              <Label fx:id="sign_in_msg_label" alignment="CENTER" layoutX="257.0" layoutY="68.0" prefHeight="18.0" prefWidth="200.0" style="-fx-alignment: center;" text="Welcome!" textFill="WHITE" />
-                              <Button fx:id="submit_sign_in_btn" layoutX="279.0" layoutY="276.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="156.0" style="-fx-background-color: #21658a;" text="Sign In" textFill="WHITE" />
+                              <TextField fx:id="sign_in_username_field" alignment="CENTER" layoutX="391.0" layoutY="147.0" promptText="Username" style="-fx-background-color: #ffffff;" />
+                              <PasswordField fx:id="sign_in_password_field" alignment="CENTER" layoutX="391.0" layoutY="205.0" promptText="Password" style="-fx-background-color: #ffffff;" />
+                              <Label fx:id="sign_in_msg_label" alignment="CENTER" layoutX="367.0" layoutY="76.0" prefHeight="18.0" prefWidth="200.0" style="-fx-alignment: center;" text="Welcome!" textFill="WHITE" />
+                              <Button fx:id="submit_sign_in_btn" layoutX="389.0" layoutY="305.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="156.0" style="-fx-background-color: #21658a;" text="Sign In" textFill="WHITE" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -156,11 +156,11 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="232.0" prefWidth="326.0">
                            <children>
-                              <TextField fx:id="sign_up_username_field" alignment="CENTER" layoutX="281.0" layoutY="118.0" promptText="Username" style="-fx-background-color: #ffffff;" />
-                              <PasswordField fx:id="sign_up_password1_field" alignment="CENTER" layoutX="281.0" layoutY="176.0" promptText="Password" style="-fx-background-color: #ffffff;" />
-                              <PasswordField fx:id="sign_up_password2_field" alignment="CENTER" layoutX="281.0" layoutY="229.0" promptText="Repeat Password" style="-fx-background-color: #ffffff;" />
-                              <Label fx:id="sign_up_msg_label" alignment="CENTER" layoutX="257.0" layoutY="70.0" prefHeight="18.0" prefWidth="200.0" style="-fx-alignment: center;" text="Welcome!" textFill="WHITE" />
-                              <Button fx:id="submit_sign_up_btn" layoutX="279.0" layoutY="287.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="156.0" style="-fx-background-color: #21658a;" text="Sign In" textFill="WHITE" />
+                              <TextField fx:id="sign_up_username_field" alignment="CENTER" layoutX="391.0" layoutY="141.0" promptText="Username" style="-fx-background-color: #ffffff;" />
+                              <PasswordField fx:id="sign_up_password1_field" alignment="CENTER" layoutX="391.0" layoutY="199.0" promptText="Password" style="-fx-background-color: #ffffff;" />
+                              <PasswordField fx:id="sign_up_password2_field" alignment="CENTER" layoutX="391.0" layoutY="252.0" promptText="Repeat Password" style="-fx-background-color: #ffffff;" />
+                              <Label fx:id="sign_up_msg_label" alignment="CENTER" layoutX="367.0" layoutY="71.0" prefHeight="18.0" prefWidth="200.0" style="-fx-alignment: center;" text="Welcome!" textFill="WHITE" />
+                              <Button fx:id="submit_sign_up_btn" layoutX="389.0" layoutY="310.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="156.0" style="-fx-background-color: #21658a;" text="Sign In" textFill="WHITE" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -169,44 +169,44 @@
             </TabPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="cart_page" layoutY="94.0" prefHeight="466.0" prefWidth="714.0" style="-fx-background-color: #1b2838;" visible="false">
+      <AnchorPane fx:id="cart_page" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
          <children>
             <Label layoutX="627.0" layoutY="28.0" style="-fx-background-color: #ffffff;" text="cart_page" />
-            <ListView fx:id="cart_items_listview" layoutX="6.0" layoutY="37.0" prefHeight="422.0" prefWidth="344.0" style="-fx-background-color: #21658a;" />
-            <Button fx:id="delete_item_from_cart_btn" layoutX="6.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="Delete Item From List" textFill="WHITE" />
-            <Button fx:id="buy_cart_items_btn" layoutX="427.0" layoutY="202.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #21658a;" text="Confirm Purchase" textFill="WHITE" />
-            <Label fx:id="purchase_cost_lbl" alignment="CENTER" layoutX="400.0" layoutY="256.0" prefHeight="20.0" prefWidth="254.0" style="-fx-border-radius: 10; -fx-background-color: #21658a;" text="You'll make a purchase for: 0" textFill="WHITE">
+            <ListView fx:id="cart_items_listview" layoutX="14.0" layoutY="84.0" prefHeight="422.0" prefWidth="344.0" style="-fx-background-color: #21658a;" />
+            <Button fx:id="delete_item_from_cart_btn" layoutX="14.0" layoutY="47.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="Delete Item From List" textFill="WHITE" />
+            <Button fx:id="buy_cart_items_btn" layoutX="585.0" layoutY="203.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #21658a;" text="Confirm Purchase" textFill="WHITE" />
+            <Label fx:id="purchase_cost_lbl" alignment="CENTER" layoutX="558.0" layoutY="257.0" prefHeight="20.0" prefWidth="254.0" style="-fx-border-radius: 10; -fx-background-color: #21658a;" text="You'll make a purchase for: 0" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="admin_page" layoutY="94.0" prefHeight="466.0" prefWidth="714.0" style="-fx-background-color: #1b2838;" visible="false">
+      <AnchorPane fx:id="admin_page" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
          <children>
             <Label layoutX="611.0" layoutY="22.0" style="-fx-background-color: #ffffff;" text="Admin_page" />
-            <ListView fx:id="all_items_admin_listview" layoutY="40.0" prefHeight="422.0" prefWidth="344.0" style="-fx-background-color: #21658a;" />
-            <Button fx:id="delete_item_from_stock_btn" layoutY="6.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="Delete item from stock" textFill="WHITE" />
-            <Button fx:id="create_new_item_in_stock_btn" layoutX="393.0" layoutY="40.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="254.0" style="-fx-background-color: #21658a;" text="Create New Item" textFill="WHITE" />
+            <ListView fx:id="all_items_admin_listview" layoutY="66.0" prefHeight="422.0" prefWidth="344.0" style="-fx-background-color: #21658a;" />
+            <Button fx:id="delete_item_from_stock_btn" layoutY="31.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="Delete item from stock" textFill="WHITE" />
+            <Button fx:id="create_new_item_in_stock_btn" layoutX="521.0" layoutY="261.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="254.0" style="-fx-background-color: #21658a;" text="Create New Item" textFill="WHITE" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="add_item_page" layoutY="94.0" prefHeight="466.0" prefWidth="714.0" style="-fx-background-color: #1b2838;" visible="false">
+      <AnchorPane fx:id="add_item_page" layoutX="-1.0" layoutY="111.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
          <children>
-            <Label layoutX="612.0" layoutY="41.0" style="-fx-background-color: #ffffff;" text="Add Item Page" />
-            <ListView fx:id="items_admin_listview" layoutX="14.0" layoutY="41.0" prefHeight="410.0" prefWidth="254.0" style="-fx-background-color: #21658a;" />
+            <Label layoutX="832.0" layoutY="15.0" style="-fx-background-color: #ffffff;" text="Add Item Page" />
+            <ListView fx:id="items_admin_listview" layoutX="14.0" layoutY="41.0" prefHeight="511.0" prefWidth="254.0" style="-fx-background-color: #21658a;" />
             <Label alignment="TOP_CENTER" layoutX="14.0" layoutY="15.0" prefHeight="18.0" prefWidth="254.0" style="-fx-background-color: #21658a;" text="Current Items List" textFill="WHITE" />
-            <Label alignment="TOP_CENTER" layoutX="343.0" layoutY="15.0" prefHeight="18.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="Add New Game" textFill="WHITE" />
-            <TextField fx:id="create_game_title_field" alignment="CENTER" layoutX="343.0" layoutY="80.0" promptText="Title" style="-fx-background-color: #21658a;" />
-            <ComboBox fx:id="create_game_genre_field" layoutX="344.0" layoutY="174.0" prefWidth="150.0" promptText="genre" />
-            <TextField fx:id="create_game_developer_field" alignment="CENTER" layoutX="536.0" layoutY="80.0" promptText="Developer" style="-fx-background-color: #21658a;" />
-            <TextField fx:id="create_game_publisher_field" alignment="CENTER" layoutX="343.0" layoutY="122.0" promptText="Publisher" style="-fx-background-color: #21658a;" />
-            <TextField fx:id="create_game_price_field" alignment="CENTER" layoutX="536.0" layoutY="122.0" promptText="Price" style="-fx-background-color: #21658a;" />
-            <DatePicker fx:id="create_game_rel_date_field" layoutX="534.0" layoutY="174.0" prefHeight="26.0" prefWidth="156.0" promptText="Release Date" />
-            <Button fx:id="add_item_btn" layoutX="437.0" layoutY="274.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="156.0" style="-fx-background-color: #21658a;" text="Add New Item" textFill="WHITE" />
-            <Label fx:id="create_item_page_label" alignment="CENTER" layoutX="343.0" layoutY="341.0" prefHeight="84.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="You'll get the message for responding actions!" />
+            <Label alignment="TOP_CENTER" layoutX="509.0" layoutY="98.0" prefHeight="18.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="Add New Game" textFill="WHITE" />
+            <TextField fx:id="create_game_title_field" alignment="CENTER" layoutX="509.0" layoutY="163.0" promptText="Title" style="-fx-background-color: #21658a;" />
+            <ComboBox fx:id="create_game_genre_field" layoutX="510.0" layoutY="257.0" prefWidth="150.0" promptText="genre" />
+            <TextField fx:id="create_game_developer_field" alignment="CENTER" layoutX="702.0" layoutY="163.0" promptText="Developer" style="-fx-background-color: #21658a;" />
+            <TextField fx:id="create_game_publisher_field" alignment="CENTER" layoutX="509.0" layoutY="205.0" promptText="Publisher" style="-fx-background-color: #21658a;" />
+            <TextField fx:id="create_game_price_field" alignment="CENTER" layoutX="702.0" layoutY="205.0" promptText="Price" style="-fx-background-color: #21658a;" />
+            <DatePicker fx:id="create_game_rel_date_field" layoutX="700.0" layoutY="257.0" prefHeight="26.0" prefWidth="156.0" promptText="Release Date" />
+            <Button fx:id="add_item_btn" layoutX="603.0" layoutY="357.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="156.0" style="-fx-background-color: #21658a;" text="Add New Item" textFill="WHITE" />
+            <Label fx:id="create_item_page_label" alignment="CENTER" layoutX="515.0" layoutY="439.0" prefHeight="84.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="You'll get the message for responding actions!" />
          </children>
       </AnchorPane>
-      <Label alignment="CENTER" layoutX="253.0" layoutY="5.0" prefHeight="18.0" prefWidth="207.0" style="-fx-background-radius: 8;" text="Welcome Stranger!" textFill="WHITE" />
+      <Label alignment="CENTER" layoutX="320.0" layoutY="9.0" prefHeight="18.0" prefWidth="207.0" style="-fx-background-radius: 8;" text="Welcome Stranger!" textFill="WHITE" />
       <Label text="Label" />
    </children>
 </AnchorPane>
