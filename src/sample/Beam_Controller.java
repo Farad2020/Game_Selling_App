@@ -1,5 +1,6 @@
 package sample;
 
+import java.awt.geom.Arc2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -71,6 +72,20 @@ public class Beam_Controller {
 
     @FXML
     private Button buy_item_btn;
+
+
+    @FXML
+    private AnchorPane user_page;
+
+    @FXML
+    private Label user_balanse_lbl;
+
+    @FXML
+    private Button add_money_btn;
+
+    @FXML
+    private TextField add_money_field;
+
 
     @FXML
     private AnchorPane item_page;
@@ -210,13 +225,18 @@ public class Beam_Controller {
 //////////////////////////////
     @FXML
     private ListView<String> filtered_games_listview;
+
+
+
+    @FXML
+    private ListView<String> user_library;
 //////////////////////////////
 
     private static File_Manager filer = new File_Manager();
     public ArrayList<Game> games_in_store = new ArrayList<>();
     private ArrayList<Game> games_in_cart = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
-    ArrayList<String> genres = new ArrayList<>(Arrays.asList("Platformer","RPG","FPS","Strategy","Stealth-Action",  "All") );
+    ArrayList<String> genres = new ArrayList<>();
     private boolean user_logged = false;
     private User current_user = null;
     //create auto filling genres through getting them from txt
@@ -224,7 +244,7 @@ public class Beam_Controller {
     private Socket socket;
     private ObjectOutputStream oos;
     private ObjectInputStream ois;
-
+    private double totalPrice = 0;
     @FXML
     void initialize() {
         /*
@@ -299,18 +319,32 @@ public class Beam_Controller {
         //Sign up
         sign_in_btn.setOnAction(event -> {
             offLayouts();
-            prep_sign_in_and_Up_page();
-            sign_in_and_Up_page.setVisible(true);
+            if (sign_in_btn.getText().equals("Sign In")){
+                prep_users();
+                prep_sign_in_and_Up_page();
+                sign_in_and_Up_page.setVisible(true);
+            }else if(sign_in_btn.getText().equals("Log Out")){
+                exit_current_user();
+                main_shop_page.setVisible(true);
+                enter_admin_btn.setVisible(false);
+            }
         });
 
 
         enter_admin_btn.setOnAction(event -> {
             offLayouts();
-            prepAdminPage();
-            admin_page.setVisible(true);
+            if( enter_admin_btn.getText().equals("Admin")){
+                prepAdminPage();
+                admin_page.setVisible(true);
+            }else if ( enter_admin_btn.getText().equals("User")){
+                prepUserPage();
+                user_page.setVisible(true);
+            }
         });
 
-
+        add_money_btn.setOnAction(event -> {
+            addBalance();
+        });
 
         // Observable list
 
@@ -358,10 +392,6 @@ public class Beam_Controller {
             log_in_check();
         });
 
-        submit_sign_in_btn.setOnAction(event -> {
-            log_in_check();
-        });
-
         submit_sign_up_btn.setOnAction(event -> {
             register();
         });
@@ -393,6 +423,7 @@ public class Beam_Controller {
                     item_page_release_lbl.setText(games_in_store.get(i).getRelease_date_string());
                     item_page_price_lbl.setText(""+games_in_store.get(i).getPrice());
                     offLayouts();
+                    item_page_msg_lbl.setText("");
                     item_page.setVisible(true);
                     break;
                 }
@@ -400,29 +431,6 @@ public class Beam_Controller {
         }
     }
 
-
-    //What if you store user selection in variable instead searching it again?
-    //Interactions with main
-    public void addItemToCart(){
-        int user_selected_item;
-        boolean repeated_request=false;
-        for (int i = 0; i < games_in_store.size(); i++) {
-            if(games_in_store.get(i).getTitle().equals(item_page_title_lbl.getText())){
-                //Checking if  games_in_cart doesn't already have this item
-                for (int j = 0; j < games_in_cart.size(); j++) {
-                    if(games_in_cart.get(i).getTitle().equals(games_in_store.get(i).getTitle())){
-                        repeated_request = true;
-                        break;
-                    }
-                }
-                if(!repeated_request) {
-                    games_in_cart.add(games_in_store.get(i));
-                    item_page_msg_lbl.setText("This Game has been added to your cart. You can check it any time.");
-                }
-                break;
-            }
-        }
-    }
 
     public void update_games_in_store(){
         try{
@@ -441,19 +449,28 @@ public class Beam_Controller {
 
 
     public void prepare_main_page_listview(){
-        if(games_in_store.size() == 0){
+        if(genres.size() == 0){
             try{
-                Request req = new Request("GET_ALL_USERS");
+                Request req = new Request("GET_ALL_GENRES");
                 ShopApp.oos.writeObject(req);
                 Reply rep = (Reply)ShopApp.ois.readObject();
-                users = rep.getUsers();
+                genres = rep.getGenres();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
-                req = new Request("GET_ALL");
+        if(games_in_store.size() == 0){
+            try{
+                Request req = new Request("GET_ALL");
                 ShopApp.oos.writeObject(req);
-                rep = (Reply)ShopApp.ois.readObject();
+                Reply rep = (Reply)ShopApp.ois.readObject();
                 games_in_store = rep.getGames();
                 if(categories_listview.getItems().size() == 0){
                     categories_listview.getItems().addAll(genres);
+                    categories_listview.getItems().add("All");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -462,12 +479,34 @@ public class Beam_Controller {
             }
         }
     }
+
+    public void prep_users(){
+        try{
+            Request req = new Request("GET_ALL_USERS");
+            ShopApp.oos.writeObject(req);
+            Reply rep = (Reply)ShopApp.ois.readObject();
+            users = rep.getUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void save_changes(){
         try{
-            Request req = new Request("SAVE_ALL", games_in_store);
+            Request req = new Request("SAVE_ALL_GAMES");
+            req.setGames(games_in_store);
             ShopApp.oos.writeObject(req);
             Reply rep = (Reply)ShopApp.ois.readObject();
             System.out.println(rep.getCode());
+
+            req = new Request("SAVE_ALL_USERS");
+            req.setUsers(users);
+            ShopApp.oos.writeObject(req);
+            rep = (Reply)ShopApp.ois.readObject();
+            System.out.println(rep.getCode());
+
         }catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -475,14 +514,35 @@ public class Beam_Controller {
     }
 
     //Cart interactions
+    //What if you store user selection in variable instead searching it again?
+    //Interactions with main
+    public void addItemToCart(){
+        boolean repeated_request=false;
+        for (int i = 0; i < games_in_store.size(); i++) {
+            if(games_in_store.get(i).getTitle().equals(item_page_title_lbl.getText())){
+                //Checking if  games_in_cart doesn't already have this item
+                for (int j = 0; j < games_in_cart.size(); j++) {
+                    if(games_in_cart.get(j).getTitle().equals(games_in_store.get(i).getTitle())){
+                        repeated_request = true;
+                        break;
+                    }
+                }
+                if(!repeated_request) {
+                    games_in_cart.add(games_in_store.get(i));
+                    item_page_msg_lbl.setText("This Game has been added to your cart. You can check it any time.");
+                }
+                break;
+            }
+        }
+    }
+
     public void setPurchaseCost(){
-        double totalPrice = 0;
+        totalPrice = 0;
         for (Game game:games_in_cart){
             totalPrice += game.getPrice();
         }
         purchase_cost_lbl.setText("You'll make a purchase for: " + totalPrice);
     }
-
 
     public void prepCartPage(){
         cart_items_listview.getItems().clear();
@@ -507,13 +567,28 @@ public class Beam_Controller {
 
 
     public void makePurchase(){
-        for (Game game:games_in_cart){
-            game.setSold( game.getSold()+1 );
+        if( current_user.getBalance()>=totalPrice ){
+            try{
+                Request req = new Request("MAKE_TRANSACTION");
+                req.setUser(current_user);
+                req.setGames(games_in_cart);
+                ShopApp.oos.writeObject(req);
+            }catch (java.io.IOException e){
+                e.printStackTrace();
+                System.out.println("Transaction error");
+            }
+
+            for (Game game:games_in_cart){
+                game.setSold( game.getSold()+1 );
+            }
+            current_user.setBalance(current_user.getBalance()-totalPrice);
+            games_in_cart.clear();
+            save_changes_btn.fire();
+            prepCartPage();
+            purchase_cost_lbl.setText("Your purchase was confirmed.");
+        }else{
+            purchase_cost_lbl.setText("You don't have enough money.");
         }
-        purchase_cost_lbl.setText("Your purchase was confirmed");
-        games_in_cart.clear();
-        save_changes_btn.fire();
-        prepCartPage();
     }
 
     //Admin interactions
@@ -541,6 +616,24 @@ public class Beam_Controller {
         prepAdminPage();
     }
 
+    //User page
+
+    public void prepUserPage(){
+        user_balanse_lbl.setText( Double.toString(current_user.getBalance()) );
+        //Nado sdelat vse // perelopatit systemu pokupok.Cart.
+    }
+
+    public void addBalance(){
+        try{
+            Double new_balance = Double.parseDouble(add_money_field.getText());
+            current_user.setBalance(current_user.getBalance()+new_balance);
+            save_changes_btn.fire();
+            enter_admin_btn.fire();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     // Log in Sign up
     public void prep_sign_in_and_Up_page(){
         sign_in_username_field.setText("");
@@ -553,21 +646,26 @@ public class Beam_Controller {
     public void log_in_check(){
         for( User u : users){
             if (u.getPassword().equals(sign_in_password_field.getText()) && u.getLogin().equals(sign_in_username_field.getText())){
-                current_user = new User(u);
-                System.out.println(current_user);
+                current_user = u;
                 if(u.isIs_moder()){
+                    enter_admin_btn.setText("Admin");
                     enter_admin_btn.setVisible(true);
                 }else{
-                    enter_admin_btn.setVisible(false);
+                    enter_admin_btn.setText("User");
+                    enter_admin_btn.setVisible(true);
                 }
-                System.out.println(u);
-                System.out.println(current_user.getLogin() );
-                String s = "Welcome " +current_user.getLogin() + "!";
+                sign_in_btn.setText("Log Out");
+                crnt_user_lbl.setText("Welcome " +current_user.getUsername() + "!" );
                 main_Beam_btn.fire();
                 break;
             }
         }
+    }
 
+    public void exit_current_user(){
+        current_user = null;
+        crnt_user_lbl.setText("Welcome Stranger!" );
+        sign_in_btn.setText("Sign In");
     }
 
     public void register(){
@@ -588,7 +686,7 @@ public class Beam_Controller {
             }
         }
         try{
-            Request req = new Request("ADD_USER", new User(null,sign_up_username_field.getText(), sign_up_username_field.getText(),sign_up_password2_field.getText(), false));
+            Request req = new Request("ADD_USER", new User(null,sign_up_username_field.getText(), sign_up_username_field.getText(),sign_up_password2_field.getText(), false, 0));
             ShopApp.oos.writeObject(req);
 
             System.out.println(sign_up_username_field.getText() + sign_up_username_field.getText() + sign_up_password2_field.getText());
@@ -633,7 +731,6 @@ public class Beam_Controller {
     public void prepAddItemPage(){
         create_game_genre_field.getItems().clear();
         create_game_genre_field.getItems().addAll(genres);
-        //"Platformer","RPG","FPS","Strategy","Stealth-Action"
         items_admin_listview.getItems().clear();
         for (int i = 0; i < games_in_store.size(); i++) {
             items_admin_listview.getItems().add( games_in_store.get(i).showDetails() + " \nSold: " + games_in_store.get(i).getSold() );
@@ -737,6 +834,7 @@ public class Beam_Controller {
         cart_page.setVisible(false);
         sign_in_and_Up_page.setVisible(false);
         item_page.setVisible(false);
+        user_page.setVisible(false);
     }
 }
 

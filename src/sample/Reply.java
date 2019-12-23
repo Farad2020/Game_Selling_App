@@ -7,10 +7,12 @@ public class Reply implements Serializable {
     private String code;
     private ArrayList<Game> games;
     private ArrayList<User> users;
+    private ArrayList<String> genres;
 
     public Reply() {
         games = new ArrayList<>();
         users = new ArrayList<>();
+        genres = new ArrayList<>();
     }
 
     public Reply(ArrayList<Game> games){
@@ -19,6 +21,18 @@ public class Reply implements Serializable {
 
     public ArrayList<User> getUsers() {
         return users;
+    }
+
+    public void setGames(ArrayList<Game> games) {
+        this.games = games;
+    }
+
+    public ArrayList<String> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(ArrayList<String> genres) {
+        this.genres = genres;
     }
 
     public void setUsers(ArrayList<User> users) {

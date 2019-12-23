@@ -8,6 +8,7 @@ public class User implements Serializable {
     protected String username;
     protected String password;
     protected boolean is_moder;
+    protected double balance;
 
     public User() {
         is_moder = false;
@@ -28,12 +29,13 @@ public class User implements Serializable {
         this.is_moder = is_moder;
     }
 
-    public User(Integer id, String login, String username, String password, boolean is_moder) {
+    public User(Integer id, String login, String username, String password, boolean is_moder, double balance) {
         this.id = id;
         this.login = login;
         this.username = username;
         this.password = password;
         this.is_moder = is_moder;
+        this.balance = balance;
     }
 
     public User(User u) {
@@ -82,6 +84,14 @@ public class User implements Serializable {
 
     public void setIs_moder(boolean is_moder) {
         this.is_moder = is_moder;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     @Override

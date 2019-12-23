@@ -169,7 +169,8 @@ public class ClientHandler extends Thread{
                 String username = rs.getString("username");
                 String password = rs.getString("password");
                 boolean is_moder = rs.getBoolean("is_moder");
-                list.add(new User(id, login, username, password, is_moder));
+                int balance = rs.getInt("balance");
+                list.add(new User(id, login, username, password, is_moder,balance));
             }
             ps.close();
         } catch (SQLException e) {
@@ -181,11 +182,12 @@ public class ClientHandler extends Thread{
 
     public void addUser(User user){
         try {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO users (id, login, username, password, is_moder) VALUES(NULL, ?, ?, ?, ?)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO users (id, login, username, password, is_moder, balance) VALUES(NULL, ?, ?, ?, ?, ?)");
             ps.setString(1, user.getLogin());
             ps.setString(2,user.getUsername());
             ps.setString(3,user.getPassword());
             ps.setBoolean(4, user.isIs_moder());
+            ps.setString(5, Double.toString(user.getBalance()));
             ps.executeUpdate();
             ps.close();
         }
@@ -197,12 +199,13 @@ public class ClientHandler extends Thread{
     public void saveUserChanges(ArrayList<User> users){
         try{
             for(User user: users){
-                PreparedStatement ps = conn.prepareStatement("UPDATE items SET login = ?, username = ?, password = ?, is_moder = ? WHERE id=?");
+                PreparedStatement ps = conn.prepareStatement("UPDATE users SET login = ?, username = ?, password = ?, is_moder = ?, balance = ? WHERE id=?");
                 ps.setString(1, user.getLogin());
                 ps.setString(2, user.getUsername());
                 ps.setString(3, user.getPassword());
                 ps.setBoolean(4, user.isIs_moder());
-                ps.setInt(5, user.getId());
+                ps.setDouble(5, user.getBalance());
+                ps.setInt(6, user.getId());
                 ps.executeUpdate();
                 ps.close();
             }
@@ -212,6 +215,46 @@ public class ClientHandler extends Thread{
 
     }
 
+    public ArrayList<String> getAllGenres(){
+        ArrayList<String> list = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * from genres");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                String genre = rs.getString("genre_name");
+                list.add(genre);
+            }
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public void make_transaction(User user, ArrayList<Game> games){
+        for (Game g : games){
+            try {
+                PreparedStatement ps = conn.prepareStatement("INSERT INTO user_transaction_history (id, user_id, game_id, purchase_time, cost) VALUES(NULL, ?, ?, ?, ?)");
+                ps.setInt(1, user.getId());
+                ps.setInt(2, g.getId());
+
+                java.util.Date date = new java.util.Date();
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                ps.setDate(3, sqlDate);
+
+                ps.setDouble(4 , g.getPrice());
+                ps.executeUpdate();
+                ps.close();
+            }
+            catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void run(){
         Request req = null;
         while(true){
@@ -219,6 +262,24 @@ public class ClientHandler extends Thread{
                 req = (Request)ois.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+
+            if(req.getCode().equals("MAKE_TRANSACTION")){
+                make_transaction(req.getUser(), req.getGames());
+                System.out.println("Transaction successful");
+            }
+
+            if(req.getCode().equals("GET_ALL_GENRES")){
+                Reply rep = new Reply();
+                ArrayList<String> genres = getAllGenres();
+
+                rep.setGenres(genres);
+
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             if(req.getCode().equals("REMOVE_USER")){
@@ -252,10 +313,7 @@ public class ClientHandler extends Thread{
                 Reply rep = new Reply();
                 ArrayList<User> users = getAllUsers();
 
-                for(User u : users){
-                    rep.addUser(u);
-                }
-
+                rep.setUsers(users);
                 try {
                     oos.writeObject(rep);
                 } catch (IOException e) {
@@ -305,9 +363,7 @@ public class ClientHandler extends Thread{
                 Reply rep = new Reply();
                 ArrayList<Game> games = getAllGames();
 
-                for(Game g : games){
-                    rep.addGame(g);
-                }
+                rep.setGames(games);
 
                 try {
                     oos.writeObject(rep);
@@ -316,7 +372,7 @@ public class ClientHandler extends Thread{
                 }
             }
 
-            if(req.getCode().equals("SAVE_ALL")){
+            if(req.getCode().equals("SAVE_ALL_GAMES")){
                 saveChanges(req.getGames());
 
                 Reply rep = new Reply("SAVED SUCCESSFULLY");

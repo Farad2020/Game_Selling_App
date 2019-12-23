@@ -10,6 +10,7 @@ public class Request implements Serializable {
     private ArrayList<Game> games = null;
     private User user;
     private ArrayList<User> users = null;
+    private ArrayList<String> genres = null;
 
     public Request() {}
 
@@ -102,6 +103,14 @@ public class Request implements Serializable {
         this.id = id;
     }
 
+    public ArrayList<String> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(ArrayList<String> genres) {
+        this.genres = genres;
+    }
+
     @Override
     public String toString() {
         return "Request " +
@@ -109,4 +118,5 @@ public class Request implements Serializable {
                 ", game: " + game +
                 ", id=" + id;
     }
+
 }
