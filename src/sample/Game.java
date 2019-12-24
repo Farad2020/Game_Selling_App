@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.sql.Date;
 
+//  Link to img ..\imgs\blanker.png
 // Selling physical copies
 public class Game extends Good {
     protected String genre;
@@ -55,6 +56,15 @@ public class Game extends Good {
                 ", price: " + price +
                 ", title: " + title +
                 ", sold: " + sold;
+    }
+
+    public String getGameInfo() {
+        return "Game: " + title +
+                ",genre: " + genre +
+                "\n publisher: " + publisher +
+                ", developer: " + developer +
+                "\n release_date: " + release_date +
+                ", price: " + price;
     }
 
     public String getGenre() {

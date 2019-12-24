@@ -11,6 +11,7 @@ public class Request implements Serializable {
     private User user;
     private ArrayList<User> users = null;
     private ArrayList<String> genres = null;
+    private ArrayList<Game_Media> game_media = null;
 
     public Request() {}
 
@@ -109,6 +110,14 @@ public class Request implements Serializable {
 
     public void setGenres(ArrayList<String> genres) {
         this.genres = genres;
+    }
+
+    public ArrayList<Game_Media> getGame_media() {
+        return game_media;
+    }
+
+    public void setGame_media(ArrayList<Game_Media> game_media) {
+        this.game_media = game_media;
     }
 
     @Override

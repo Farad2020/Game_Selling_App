@@ -8,11 +8,15 @@ public class Reply implements Serializable {
     private ArrayList<Game> games;
     private ArrayList<User> users;
     private ArrayList<String> genres;
+    private ArrayList<String> strings;
+    private ArrayList<Game_Media> game_media;
+
 
     public Reply() {
         games = new ArrayList<>();
         users = new ArrayList<>();
         genres = new ArrayList<>();
+        strings = new ArrayList<>();
     }
 
     public Reply(ArrayList<Game> games){
@@ -63,4 +67,19 @@ public class Reply implements Serializable {
         this.code = code;
     }
 
+    public ArrayList<String> getStrings() {
+        return strings;
+    }
+
+    public void setStrings(ArrayList<String> history) {
+        this.strings = history;
+    }
+
+    public ArrayList<Game_Media> getGame_media() {
+        return game_media;
+    }
+
+    public void setGame_media(ArrayList<Game_Media> game_media) {
+        this.game_media = game_media;
+    }
 }

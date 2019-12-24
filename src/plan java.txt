@@ -1,10 +1,6 @@
 ДОБАВИТЬ ТАБЛИЦУ
 """Мб когда какие юзеры были активны"""
 
-Юзер: 
-2.история покупок
-5.библиотека
-
 Игры:
 1.Картинки
 https://www.tutorialspoint.com/javafx/javafx_images.htm
@@ -13,9 +9,12 @@ https://www.tutorialspoint.com/javafx/javafx_images.htm
 
 2.Медиа
 
-3.Несколько жанров
+4. Возможность отключить игру со списков поисковика
+ 
+5.Несколько жанров
 https://stackoverflow.com/questions/26186572/selecting-multiple-items-from-combobox
 (в стринге иф контэйнс тогда вывод)
+
 
 
 ДЛС
@@ -25,3 +24,5 @@ https://stackoverflow.com/questions/26186572/selecting-multiple-items-from-combo
 НА ПОТОМ
 Таблица покупок ДЛС
 История въхода и выхода юзеров 
+
+юзер Возможность отправлений сообщений на почту 

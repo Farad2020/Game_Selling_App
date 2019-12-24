@@ -11,6 +11,8 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -65,30 +67,52 @@
             <Button fx:id="buy_item_btn" layoutX="158.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="207.0" style="-fx-background-color: #21658a;" text="Buy" textFill="WHITE" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="user_page" layoutX="-1.0" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
-         <children>
-            <Label layoutX="857.0" layoutY="22.0" style="-fx-background-color: #ffffff;" text="User_page" />
-            <ListView fx:id="user_library" layoutY="37.0" prefHeight="511.0" prefWidth="344.0" style="-fx-background-color: #21658a;" />
-            <Button fx:id="add_money_btn" layoutX="764.0" layoutY="129.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="156.0" style="-fx-background-color: #21658a;" text="Make Transaction" textFill="WHITE" />
-            <Label layoutX="54.0" layoutY="8.0" text="Your Games Library:" textFill="WHITE" wrapText="true">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Label>
-            <Label layoutX="571.0" layoutY="36.0" text="Your current balanse:" textFill="WHITE" wrapText="true">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Label>
-            <Label fx:id="user_balanse_lbl" layoutX="636.0" layoutY="64.0" text="None" textFill="WHITE" wrapText="true">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Label>
-            <TextField fx:id="add_money_field" alignment="CENTER" layoutX="577.0" layoutY="132.0" promptText="Amout of Money" style="-fx-background-color: #21658a;" />
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="item_page" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
+      <TabPane fx:id="user_page" layoutX="-1.0" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" tabClosingPolicy="UNAVAILABLE" visible="false">
+         <tabs>
+            <Tab text="Main">
+               <content>
+                  <AnchorPane fx:id="user_page_main" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;">
+                     <children>
+                        <Label layoutX="857.0" layoutY="22.0" style="-fx-background-color: #ffffff;" text="User_page" />
+                        <ListView fx:id="user_library" layoutY="40.0" prefHeight="450.0" prefWidth="300.0" style="-fx-background-color: #21658a;" />
+                        <Label layoutX="54.0" layoutY="8.0" text="Your Games Library:" textFill="WHITE" wrapText="true">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
+            <Tab text="History">
+               <content>
+                  <AnchorPane fx:id="user_page_history" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;">
+                     <children>
+                        <Label layoutX="857.0" layoutY="22.0" style="-fx-background-color: #ffffff;" text="User_page" />
+                        <ListView fx:id="user_transaction_history" layoutY="40.0" prefHeight="450.0" prefWidth="490.0" style="-fx-background-color: #21658a;" />
+                        <Button fx:id="add_money_btn" layoutX="764.0" layoutY="129.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="156.0" style="-fx-background-color: #21658a;" text="Make Transaction" textFill="WHITE" />
+                        <Label layoutX="140.0" layoutY="8.0" text="Your Transaction History:" textFill="WHITE" wrapText="true">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="571.0" layoutY="36.0" text="Your current balanse:" textFill="WHITE" wrapText="true">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="user_balanse_lbl" layoutX="636.0" layoutY="64.0" text="None" textFill="WHITE" wrapText="true">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="add_money_field" alignment="CENTER" layoutX="577.0" layoutY="132.0" promptText="Amout of Money" style="-fx-background-color: #21658a;" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+      <AnchorPane fx:id="item_page" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;">
          <children>
             <Button fx:id="add_to_cart_btn" layoutX="705.0" layoutY="504.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #21658a;" text="Add to cart" textFill="WHITE" />
             <Button fx:id="return_btn" layoutX="12.0" layoutY="504.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="207.0" style="-fx-background-color: #21658a;" text="&lt;&lt;Back" textFill="WHITE" />
@@ -157,6 +181,11 @@
                   <Font size="19.0" />
                </font>
             </Label>
+            <ImageView fx:id="game_img" fitHeight="150.0" fitWidth="200.0" layoutX="724.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../imgs/blanker.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="sign_in_and_Up_page" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
@@ -205,20 +234,21 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="admin_page" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
+      <AnchorPane fx:id="admin_page" layoutY="110.0" prefHeight="554.0" prefWidth="934.0" style="-fx-background-color: #1b2838;">
          <children>
-            <Label layoutX="611.0" layoutY="22.0" style="-fx-background-color: #ffffff;" text="Admin_page" />
-            <ListView fx:id="all_items_admin_listview" layoutY="66.0" prefHeight="422.0" prefWidth="344.0" style="-fx-background-color: #21658a;" />
-            <Button fx:id="delete_item_from_stock_btn" layoutY="31.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="Delete item from stock" textFill="WHITE" />
-            <Button fx:id="create_new_item_in_stock_btn" layoutX="521.0" layoutY="261.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="254.0" style="-fx-background-color: #21658a;" text="Create New Item" textFill="WHITE" />
+            <Label layoutX="845.0" layoutY="5.0" style="-fx-background-color: #ffffff;" text="Admin_page" />
+            <ListView fx:id="all_items_admin_listview" layoutX="14.0" layoutY="75.0" prefHeight="478.0" prefWidth="903.0" style="-fx-background-color: #21658a;" />
+            <Button fx:id="delete_item_from_stock_btn" layoutX="14.0" layoutY="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="254.0" style="-fx-background-color: #21658a;" text="Delete item from stock" textFill="WHITE" />
+            <Button fx:id="create_new_item_in_stock_btn" layoutX="653.0" layoutY="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="265.0" style="-fx-background-color: #21658a;" text="Create New Item" textFill="WHITE" />
+            <Button fx:id="edit_item_in_stock_btn" layoutX="338.0" layoutY="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="254.0" style="-fx-background-color: #21658a;" text="Edit Selected Item" textFill="WHITE" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="add_item_page" layoutX="-1.0" layoutY="104.0" prefHeight="561.0" prefWidth="934.0" style="-fx-background-color: #1b2838;" visible="false">
+      <AnchorPane fx:id="add_item_page" layoutX="-1.0" layoutY="104.0" prefHeight="561.0" prefWidth="934.0" style="-fx-background-color: #1b2838;">
          <children>
             <Label layoutX="832.0" layoutY="15.0" style="-fx-background-color: #ffffff;" text="Add Item Page" />
-            <ListView fx:id="items_admin_listview" layoutX="14.0" layoutY="41.0" prefHeight="511.0" prefWidth="254.0" style="-fx-background-color: #21658a;" />
-            <Label alignment="TOP_CENTER" layoutX="14.0" layoutY="15.0" prefHeight="18.0" prefWidth="254.0" style="-fx-background-color: #21658a;" text="Current Items List" textFill="WHITE" />
-            <Label alignment="TOP_CENTER" layoutX="509.0" layoutY="98.0" prefHeight="18.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="Add New Game" textFill="WHITE" />
+            <ListView fx:id="items_admin_listview" layoutX="14.0" layoutY="41.0" prefHeight="511.0" prefWidth="458.0" style="-fx-background-color: #21658a;" />
+            <Label alignment="TOP_CENTER" layoutX="14.0" layoutY="15.0" prefHeight="18.0" prefWidth="458.0" style="-fx-background-color: #21658a;" text="Current Items List" textFill="WHITE" />
+            <Label fx:id="item_edit_create_lbl" alignment="TOP_CENTER" layoutX="509.0" layoutY="98.0" prefHeight="18.0" prefWidth="344.0" style="-fx-background-color: #21658a;" text="Add New Game" textFill="WHITE" />
             <TextField fx:id="create_game_title_field" alignment="CENTER" layoutX="509.0" layoutY="163.0" promptText="Title" style="-fx-background-color: #21658a;" />
             <ComboBox fx:id="create_game_genre_field" layoutX="510.0" layoutY="257.0" prefWidth="150.0" promptText="genre" />
             <TextField fx:id="create_game_developer_field" alignment="CENTER" layoutX="702.0" layoutY="163.0" promptText="Developer" style="-fx-background-color: #21658a;" />

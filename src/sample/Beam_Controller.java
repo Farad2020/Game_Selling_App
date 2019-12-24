@@ -27,6 +27,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 public class Beam_Controller {
@@ -65,9 +66,6 @@ public class Beam_Controller {
     private AnchorPane main_shop_page;
 
     @FXML
-    private ListView<String> categories_listview;
-
-    @FXML
     private Button choose_category_btn;
 
     @FXML
@@ -75,17 +73,22 @@ public class Beam_Controller {
 
 
     @FXML
-    private AnchorPane user_page;
+    private TabPane user_page;
 
     @FXML
-    private Label user_balanse_lbl;
+    private AnchorPane user_page_main;
+
+    @FXML
+    private AnchorPane user_page_history;
 
     @FXML
     private Button add_money_btn;
 
     @FXML
-    private TextField add_money_field;
+    private Label user_balanse_lbl;
 
+    @FXML
+    private TextField add_money_field;
 
     @FXML
     private AnchorPane item_page;
@@ -116,6 +119,10 @@ public class Beam_Controller {
 
     @FXML
     private Label item_page_price_lbl;
+
+
+    @FXML
+    private ImageView game_img;
 
     @FXML
     private Label purchase_cost_lbl;
@@ -173,9 +180,6 @@ public class Beam_Controller {
     private AnchorPane cart_page;
 
     @FXML
-    private ListView<String> cart_items_listview;
-
-    @FXML
     private Button delete_item_from_cart_btn;
 
     @FXML
@@ -184,8 +188,6 @@ public class Beam_Controller {
     @FXML
     private AnchorPane admin_page;
 
-    @FXML
-    private ListView<String> all_items_admin_listview;
 
     @FXML
     private Button delete_item_from_stock_btn;
@@ -194,10 +196,10 @@ public class Beam_Controller {
     private Button create_new_item_in_stock_btn;
 
     @FXML
-    private AnchorPane add_item_page;
+    private Button edit_item_in_stock_btn;
 
     @FXML
-    private ListView<String> items_admin_listview;
+    private AnchorPane add_item_page;
 
     @FXML
     private TextField create_game_title_field;
@@ -226,7 +228,24 @@ public class Beam_Controller {
     @FXML
     private ListView<String> filtered_games_listview;
 
+    @FXML
+    private ListView<String> categories_listview;
 
+    @FXML
+    private ListView<String> cart_items_listview;
+
+    @FXML
+    private ListView<String> all_items_admin_listview;
+
+    @FXML
+    private Label item_edit_create_lbl;
+
+    @FXML
+    private ListView<String> items_admin_listview;
+
+
+    @FXML
+    private ListView<String> user_transaction_history;
 
     @FXML
     private ListView<String> user_library;
@@ -236,9 +255,10 @@ public class Beam_Controller {
     public ArrayList<Game> games_in_store = new ArrayList<>();
     private ArrayList<Game> games_in_cart = new ArrayList<>();
     private ArrayList<User> users = new ArrayList<>();
-    ArrayList<String> genres = new ArrayList<>();
-    private boolean user_logged = false;
+    private ArrayList<String> genres = new ArrayList<>();
+    private ArrayList<Game_Media> game_media = new ArrayList<>();
     private User current_user = null;
+    private Game editing_game = null;
     //create auto filling genres through getting them from txt
 
     private Socket socket;
@@ -247,18 +267,6 @@ public class Beam_Controller {
     private double totalPrice = 0;
     @FXML
     void initialize() {
-        /*
-        try {
-            socket = new Socket("127.0.0.1", 1999);
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
-
         // set items for -> categories_listview.
         //prep_genres();
         enter_admin_btn.setVisible(false);
@@ -365,10 +373,23 @@ public class Beam_Controller {
         //Admin interactions
 
         create_new_item_in_stock_btn.setOnAction(event -> {
+            add_item_btn.setText("Add New Game");
+            item_edit_create_lbl.setText("Create New Game");
             offLayouts();
             prepAddItemPage();
             reset_creation_page();
             add_item_page.setVisible(true);
+        });
+
+        edit_item_in_stock_btn.setOnAction(event -> {
+            if(all_items_admin_listview.getSelectionModel().getSelectedIndex() != -1){
+                add_item_btn.setText("Edit Game");
+                item_edit_create_lbl.setText("Edit Game");
+                offLayouts();
+                fill_creation_page();
+                prepAddItemPage();
+                add_item_page.setVisible(true);
+            }
         });
 
 
@@ -378,7 +399,11 @@ public class Beam_Controller {
 
 
         add_item_btn.setOnAction(event -> {
-            create_new_item();
+            if(add_item_btn.getText().equals("Add New Game")){
+                create_new_item();
+            }else if(add_item_btn.getText().equals("Edit Game")){
+                edit_item();
+            }
             save_changes_btn.fire();
         });
 
@@ -414,16 +439,16 @@ public class Beam_Controller {
     public void open_item_page(){
         if(filtered_games_listview.getSelectionModel().getSelectedIndex() != -1){
             //Checking if user selected something and filling the page
-            for (int i = 0; i < games_in_store.size(); i++) {
-                if(games_in_store.get(i).showDetails().equals(filtered_games_listview.getSelectionModel().getSelectedItem())){
-                    item_page_title_lbl.setText(games_in_store.get(i).getTitle());
-                    item_page_dev_lbl.setText(games_in_store.get(i).getDeveloper());
-                    item_page_publish_lbl.setText(games_in_store.get(i).getPublisher());
-                    item_page_gnr_lbl.setText(games_in_store.get(i).getGenre());
-                    item_page_release_lbl.setText(games_in_store.get(i).getRelease_date_string());
-                    item_page_price_lbl.setText(""+games_in_store.get(i).getPrice());
-                    offLayouts();
+            for (Game game : games_in_store) {
+                if(game.showDetails().equals(filtered_games_listview.getSelectionModel().getSelectedItem())){
+                    item_page_title_lbl.setText(game.getTitle());
+                    item_page_dev_lbl.setText(game.getDeveloper());
+                    item_page_publish_lbl.setText(game.getPublisher());
+                    item_page_gnr_lbl.setText(game.getGenre());
+                    item_page_release_lbl.setText(game.getRelease_date_string());
+                    item_page_price_lbl.setText(""+game.getPrice());
                     item_page_msg_lbl.setText("");
+                    offLayouts();
                     item_page.setVisible(true);
                     break;
                 }
@@ -438,8 +463,7 @@ public class Beam_Controller {
             ShopApp.oos.writeObject(req);
             Reply rep = (Reply)ShopApp.ois.readObject();
             games_in_store.clear();
-            for(Game g:rep.getGames())
-                games_in_store.add(g);
+            games_in_store.addAll(rep.getGames());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -472,6 +496,19 @@ public class Beam_Controller {
                     categories_listview.getItems().addAll(genres);
                     categories_listview.getItems().add("All");
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(game_media.size() == 0){
+            try{
+                Request req = new Request("PREP_IMGS");
+                ShopApp.oos.writeObject(req);
+                Reply rep = (Reply)ShopApp.ois.readObject();
+                game_media = rep.getGame_media();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -620,7 +657,22 @@ public class Beam_Controller {
 
     public void prepUserPage(){
         user_balanse_lbl.setText( Double.toString(current_user.getBalance()) );
-        //Nado sdelat vse // perelopatit systemu pokupok.Cart.
+        try {
+            Request req = new Request("USER_TRANS_HISTORY");
+            req.setId(current_user.getId());
+            ShopApp.oos.writeObject(req);
+            Reply rep = (Reply)ShopApp.ois.readObject();
+            ArrayList<String> history = rep.getStrings();
+            user_transaction_history.getItems().addAll(history);
+
+            req = new Request("USER_GAMES_LIBRARY");
+            req.setId(current_user.getId());
+            ShopApp.oos.writeObject(req);
+            rep = (Reply)ShopApp.ois.readObject();
+            user_library.getItems().addAll(rep.getStrings());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addBalance(){
@@ -738,13 +790,39 @@ public class Beam_Controller {
     }
 
 
+    public void edit_item(){
+        create_item_page_label.setText("You'll get the message for responding actions!");
+        String title = create_game_title_field.getText();
+        String developer = create_game_developer_field.getText();
+        String publisher = create_game_publisher_field.getText();
+        String genre = create_game_genre_field.getSelectionModel().getSelectedItem();
+        String release_date = create_game_rel_date_field.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        double price = 0;
+        try{
+            price = Double.parseDouble(create_game_price_field.getText());
+        }catch (java.lang.NumberFormatException e){
+            create_item_page_label.setText("You need to fill all of the following fields correctly: price");
+            return;
+        }
+        if(check_is_creator_filled(title, genre, publisher, developer, release_date)){
+            editing_game.setTitle(title);
+            editing_game.setGenre(genre);
+            editing_game.setPublisher(publisher);
+            editing_game.setDeveloper(developer);
+            editing_game.setRelease_date_from_str(release_date);
+            editing_game.setPrice(price);
+            save_changes();
+            enter_admin_btn.fire();
+        }
+    }
+
     public void create_new_item(){
         create_item_page_label.setText("You'll get the message for responding actions!");
         String title = create_game_title_field.getText();
         String developer = create_game_developer_field.getText();
         String publisher = create_game_publisher_field.getText();
         String genre = create_game_genre_field.getSelectionModel().getSelectedItem();
-        String date = create_game_rel_date_field.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        String release_date = create_game_rel_date_field.getValue().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         int sold = 0;
         double price = 0;
         try{
@@ -753,15 +831,9 @@ public class Beam_Controller {
             create_item_page_label.setText("You need to fill all of the following fields correctly: price");
             return;
         }
-        if(check_is_creator_filled(title, genre, publisher, developer, date)){
-            System.out.println(date);
-            Game g = new Game(null, price, title, sold, genre, publisher, developer, date);
+        if(check_is_creator_filled(title, genre, publisher, developer, release_date)){
+            Game g = new Game(null, price, title, sold, genre, publisher, developer, release_date);
             try {
-                /*
-                SimpleDateFormat sd = new SimpleDateFormat("dd-MM-yyyy");
-                java.util.Date date = sd.parse(rdate);
-                java.sql.Date sqlRelDate = new java.sql.Date(date.getTime());
-                */
                 Request req = new Request("ADD", g);
                 ShopApp.oos.writeObject(req);
                 Reply rep = (Reply)ShopApp.ois.readObject();
@@ -786,6 +858,23 @@ public class Beam_Controller {
         create_game_price_field.setText(null);
     }
 
+    public void fill_creation_page(){
+        for (Game game : games_in_store) {
+            if(game.showDetails().equals(all_items_admin_listview.getSelectionModel().getSelectedItem())){
+                editing_game = game;
+                create_item_page_label.setText("You'll get the message for responding actions!");
+                create_game_title_field.setText(game.getTitle());
+                create_game_developer_field.setText(game.getDeveloper());
+                create_game_publisher_field.setText(game.getPublisher());
+                ///////////////////////////////////////////////////////////////////////////////////////
+                create_game_genre_field.setValue(game.getGenre());
+                ///////////////////////////////////////////////////////////////////////////////////////
+                create_game_rel_date_field.setValue(game.getRelease_date().toLocalDate());
+                create_game_price_field.setText(Double.toString(game.getPrice()));
+                break;
+            }
+        }
+    }
 
     public boolean check_is_creator_filled( String title, String genre, String publisher, String developer, String release_date){
         String error_msg = "You need to fill next fields: ";
@@ -812,8 +901,8 @@ public class Beam_Controller {
             error_msg += " release_date ";
         }
 
-        for (int i = 0; i < games_in_store.size(); i++) {
-            if(games_in_store.get(i).getTitle().equals(title)){
+        for (Game game : games_in_store ) {
+            if(game.getTitle().equals(title) && game.getId() != editing_game.getId()){
                 has_error=true;
                 error_msg += " title must be unique ";
                 break;
