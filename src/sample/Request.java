@@ -7,11 +7,13 @@ public class Request implements Serializable {
     private String code;
     private Game game;
     private Integer id;
-    private ArrayList<Game> games = null;
     private User user;
+    private Game_Media game_medium;
+    private ArrayList<Game> games = null;
     private ArrayList<User> users = null;
     private ArrayList<String> genres = null;
-    private ArrayList<Game_Media> game_media = null;
+    private ArrayList<Game_Media> game_medias = null;
+
 
     public Request() {}
 
@@ -112,12 +114,20 @@ public class Request implements Serializable {
         this.genres = genres;
     }
 
-    public ArrayList<Game_Media> getGame_media() {
-        return game_media;
+    public ArrayList<Game_Media> getGame_medias() {
+        return game_medias;
     }
 
-    public void setGame_media(ArrayList<Game_Media> game_media) {
-        this.game_media = game_media;
+    public void setGame_medias(ArrayList<Game_Media> game_medias) {
+        this.game_medias = game_medias;
+    }
+
+    public Game_Media getGame_medium() {
+        return game_medium;
+    }
+
+    public void setGame_medium(Game_Media game_medium) {
+        this.game_medium = game_medium;
     }
 
     @Override

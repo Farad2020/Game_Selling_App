@@ -1,6 +1,8 @@
 package sample;
 
-public class Game_Media {
+import java.io.Serializable;
+
+public class Game_Media  implements Serializable {
     protected int id;
     protected int game_id;
     protected String img_src;

@@ -38,6 +38,14 @@ public class User implements Serializable {
         this.balance = balance;
     }
 
+    public String showDetails(){
+        String data = "";
+        data ="id: " + id +", login: " + login + '\n' +
+                "username: " + username  +", password: " + password + '\n' +
+                "is_moder: " + is_moder;
+        return data;
+    }
+
     public User(User u) {
         this.id = u.id;
         this.login = u.login;

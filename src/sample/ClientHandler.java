@@ -107,24 +107,7 @@ public class ClientHandler extends Thread{
         }
     }
 
-    public ArrayList<Game_Media> getAllGameMedia(){
-        ArrayList<Game_Media> list = new ArrayList<>();
-        try {
-            PreparedStatement ps = conn.prepareStatement("SELECT * from game_media");
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                int game_id = rs.getInt("game_id");
-                String img_src = rs.getString("game_img_source");
-                list.add(new Game_Media(game_id, img_src));
-            }
-            ps.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public void saveChanges(ArrayList<Game> games){
+    public void saveGameChanges(ArrayList<Game> games){
         try{
             for(Game game: games){
                 PreparedStatement ps = conn.prepareStatement("UPDATE items SET price = ?, model = ?, sold = ?, genre = ?, publisher = ?, developer = ?, release_date = ?  WHERE id=?");
@@ -143,6 +126,90 @@ public class ClientHandler extends Thread{
             e.printStackTrace();
         }
 
+    }
+
+    public ArrayList<Game_Media> getAllGameMedia(){
+        ArrayList<Game_Media> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * from game_media");
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int game_id = rs.getInt("game_id");
+                String img_src = rs.getString("game_img_source");
+                list.add(new Game_Media(game_id, img_src));
+            }
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void saveGameMediaChanges(ArrayList<Game_Media> medias){
+        try{
+            for(Game_Media media : medias){
+                PreparedStatement ps = conn.prepareStatement("UPDATE game_media SET game_id = ?, game_img_source = ? WHERE id=?");
+                ps.setInt(1, media.getGame_id());
+                ps.setString(2,media.getImg_src());
+                ps.setInt(3, media.getId());
+                ps.executeUpdate();
+                ps.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addGameMedia(Game_Media gm){
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from game_media where game_id = ?");
+            ps.setInt(1, gm.getGame_id());
+            ResultSet rs = ps.executeQuery();
+            if(!rs.next()){
+                ps = conn.prepareStatement("INSERT INTO game_media (id, game_id, game_img_source) VALUES(NULL, ?, ?)");
+                ps.setInt(1, gm.getGame_id());
+                ps.setString(2,gm.getImg_src());
+                ps.executeUpdate();
+                ps.close();
+            }else{
+                ps = conn.prepareStatement("UPDATE game_media SET game_img_source = ? WHERE game_id = ?");
+                ps.setString(1, gm.getImg_src());
+                ps.setInt(2,gm.getGame_id());
+                ps.executeUpdate();
+                ps.close();
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void removeGameMedia(int id){
+        try {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM game_media where id = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public String getGameImgSrc(int game_id){
+        String src = "";
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * from game_media where game_id=?");
+            ps.setInt(1, game_id);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                src = rs.getString("game_img_source");
+            }
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return src;
     }
 
     public void remove_user(int id){
@@ -288,8 +355,15 @@ public class ClientHandler extends Thread{
             ps.setInt(1, user_id);
             ResultSet rs = ps.executeQuery();
             int i = 1;  //as listing method
+            String bought_game = "";
+            String game_owner = "";
+            DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+            String date, cost;
             while(rs.next()){
-                String bought_game = "";
+                date = df.format(rs.getDate("purchase_time"));
+                cost = Double.toString(rs.getDouble("cost"));
+                game_owner = "";
+                bought_game = "";
                 ArrayList<Game> games = getAllGames();
                 for( Game g : games){
                     if(g.getId() == rs.getInt("game_id")){
@@ -297,10 +371,40 @@ public class ClientHandler extends Thread{
                         break;
                     }
                 }
+                ArrayList<User> users = getAllUsers();
+                for( User u : users){
+                    if(u.getId() == rs.getInt("user_id")){
+                        game_owner = u.getLogin();
+                        break;
+                    }
+                }
 
-                String transaction = i + " " + bought_game ;
+                String transaction = i + " " + bought_game + " " + game_owner + " " + date + " " + cost ;
                 i++;
                 list.add(transaction);
+            }
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public ArrayList<Game> getUserGames(int user_id){
+        ArrayList<Game> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * from user_transaction_history where user_id=?");
+            ps.setInt(1, user_id);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                ArrayList<Game> games = getAllGames();
+                for( Game g : games){
+                    if(g.getId() == rs.getInt("game_id")){
+                        list.add(g);
+                        break;
+                    }
+                }
             }
             ps.close();
         } catch (SQLException e) {
@@ -331,6 +435,34 @@ public class ClientHandler extends Thread{
         }
     }
 
+    public ArrayList<String> getAllTransactions(){
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT * from user_transaction_history");
+            ResultSet rs = ps.executeQuery();
+            int i = 1;  //as listing method
+            while(rs.next()){
+                String bought_game = "";
+                ArrayList<Game> games = getAllGames();
+                for( Game g : games){
+                    if(g.getId() == rs.getInt("game_id")){
+                        bought_game = g.getGameInfo();
+                        break;
+                    }
+                }
+
+                String transaction = i + " " + bought_game ;
+                i++;
+                list.add(transaction);
+            }
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
     public void run(){
         Request req = null;
         while(true){
@@ -349,6 +481,29 @@ public class ClientHandler extends Thread{
             if(req.getCode().equals("USER_TRANS_HISTORY")){
                 Reply rep = new Reply();
                 ArrayList<String> history = getUserTransHistory(req.getId());
+                rep.setStrings(history);
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(req.getCode().equals("GET_USER_GAMES")){
+                Reply rep = new Reply();
+                ArrayList<Game> lib = getUserGames(req.getId());
+                rep.setGames(lib);
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            if(req.getCode().equals("GET_ALL_TRANSACTIONS")){
+                Reply rep = new Reply();
+                ArrayList<String> history = getAllTransactions();
                 rep.setStrings(history);
                 try {
                     oos.writeObject(rep);
@@ -449,7 +604,43 @@ public class ClientHandler extends Thread{
                 }
             }
 
+            if(req.getCode().equals("GET_IMG_SRC")){
+                Reply rep = new Reply();
+                rep.setCode(getGameImgSrc(req.getId()));
 
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(req.getCode().equals("REMOVE_IMG")){
+                removeGameMedia(req.getId());
+                System.out.println("IMG Removed Successfully");
+            }
+
+            if(req.getCode().equals("UPDATE_IMG")){
+                saveGameMediaChanges(req.getGame_medias());
+
+                Reply rep = new Reply("GAMES UPDATED SUCCESSFULLY");
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(req.getCode().equals("ADD_IMG")){
+                addGameMedia(req.getGame_medium());
+
+                Reply rep = new Reply("IMG ADDED SUCCESSFULLY");
+                try {
+                    oos.writeObject(rep);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             //Game interactions
 
             if(req.getCode().equals("REMOVE")){
@@ -493,7 +684,7 @@ public class ClientHandler extends Thread{
             }
 
             if(req.getCode().equals("SAVE_ALL_GAMES")){
-                saveChanges(req.getGames());
+                saveGameChanges(req.getGames());
 
                 Reply rep = new Reply("GAMES SAVED SUCCESSFULLY");
                 try {
